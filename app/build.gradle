@@ -10,7 +10,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.foody"
+        applicationId "com.naumenko.myrecipes"
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 1
