@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import coil.load
+import com.bumptech.glide.Glide
 import com.naumenko.myrecipes.R
 import com.naumenko.myrecipes.adapters.RecipeRowBinding
 import com.naumenko.myrecipes.databinding.FragmentOverviewBinding
@@ -29,8 +30,14 @@ class OverviewFragment : Fragment() {
 
         val args = arguments
         val myBundle: Result = args!!.getParcelable<Result>(RECIPE_RESULT_KEY) as Result
+        Glide.with(requireContext())
+            .load(myBundle.image)
+            .centerCrop()
+            .error(R.drawable.ic_error_placeholder)
+            .into( binding.mainImageView)
 
-        binding.mainImageView.load(myBundle.image)
+
+//        binding.mainImageView.load(myBundle.image)
         binding.titleTextView.text = myBundle.title
         binding.likesTextView.text = myBundle.aggregateLikes.toString()
         binding.timeTextView.text = myBundle.readyInMinutes.toString()

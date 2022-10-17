@@ -86,7 +86,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         mAdapter = RecipesAdapter(object : ResultActionListener {
-            override fun onUserDetails(result: Result) {
+            override fun onRecipesDetails(result: Result) {
+                Log.d("RecipesFragment", result.toString())
                 val action =
                     RecipesFragmentDirections.actionRecipesFragmentToDetailsActivity(result)
                 findNavController().navigate(action)
@@ -149,7 +150,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             mainViewModel.readRecipes.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     Log.d("RecipesFragment", "readDatabase called!")
-                    mAdapter.recipes = database.first().foodRecipe.results
+//                    mAdapter.recipes = database.first().foodRecipe.results
+                     mAdapter.submitList(database.first().foodRecipe.results)
 //                    hideShimmerEffect()
                 } else {
                     requestApiData()
@@ -165,7 +167,9 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             when (response) {
                 is NetworkResult.Success -> {
 //                    hideShimmerEffect()
-                    mAdapter.recipes =  response.data!!.results
+//                    mAdapter.recipes =  response.data!!.results
+                    response.data?.results.let { mAdapter.submitList(it) }
+                    Log.d("RecipesFragment", response.data?.results?.first().toString())
 //                    response.data?.let { mAdapter.setData(it) }
                     recipeViewModel.saveMealAndDietType()
                 }
@@ -193,7 +197,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                 is NetworkResult.Success -> {
 //                    hideShimmerEffect()
                     val foodRecipe = response.data
-                    mAdapter.recipes=foodRecipe!!.results
+//                    mAdapter.recipes=foodRecipe!!.results
+                    foodRecipe?.results.let { mAdapter.submitList(it) }
 //                    foodRecipe?.let { mAdapter.setData(it) }
                 }
                 is NetworkResult.Error -> {
@@ -216,7 +221,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         lifecycleScope.launch {
             mainViewModel.readRecipes.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    mAdapter.recipes = database.first().foodRecipe.results
+//                    mAdapter.recipes = database.first().foodRecipe.results
+                    mAdapter.submitList(database.first().foodRecipe.results)
 //                    mAdapter.setData(database.first().foodRecipe)
                 }
             }
