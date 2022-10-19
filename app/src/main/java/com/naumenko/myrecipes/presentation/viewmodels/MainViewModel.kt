@@ -30,7 +30,8 @@ class MainViewModel @Inject constructor(
     /** ROOM DATABASE */
 
     val readRecipes: LiveData<List<RecipeEntity>> = repository.local.readRecipes().asLiveData()
-    val readFavoriteRecipes: LiveData<List<FavoriteEntity>> = repository.local.readFavoriteRecipes().asLiveData()
+    val readFavoriteRecipes: LiveData<List<FavoriteEntity>> =
+        repository.local.readFavoriteRecipes().asLiveData()
     val readFoodJoke: LiveData<List<FoodJokeEntity>> = repository.local.readFoodJoke().asLiveData()
 
     private fun insertRecipes(recipeEntity: RecipeEntity) =
@@ -83,7 +84,7 @@ class MainViewModel @Inject constructor(
                 recipesResponse.value = handleFoodRecipesResponse(response)
 
                 val foodRecipe = recipesResponse.value!!.data
-                if(foodRecipe != null) {
+                if (foodRecipe != null) {
                     offlineCacheRecipes(foodRecipe)
                 }
             } catch (e: Exception) {
@@ -114,10 +115,10 @@ class MainViewModel @Inject constructor(
             try {
                 val response = repository.remote.getFoodJoke(apiKey)
                 foodJokeResponse.value = handleFoodJokeResponse(response)
-                
+
 
                 val foodJoke = foodJokeResponse.value!!.data
-                if(foodJoke != null){
+                if (foodJoke != null) {
                     offlineCacheFoodJoke(foodJoke)
                 }
             } catch (e: Exception) {

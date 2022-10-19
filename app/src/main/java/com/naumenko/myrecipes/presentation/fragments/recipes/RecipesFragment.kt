@@ -40,14 +40,13 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var recipeViewModel: RecipeViewModel
-//    private val mAdapter by lazy { RecipesAdapter() }
     private lateinit var mAdapter: RecipesAdapter
 
     private lateinit var networkListener: NetworkListener
 
     override fun onResume() {
         super.onResume()
-        if(mainViewModel.recyclerViewState != null){
+        if (mainViewModel.recyclerViewState != null) {
             binding.recyclerview.layoutManager?.onRestoreInstanceState(mainViewModel.recyclerViewState)
         }
     }
@@ -63,7 +62,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentRecipesBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
@@ -87,12 +85,10 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
         mAdapter = RecipesAdapter(object : ResultActionListener {
             override fun onRecipesDetails(result: Result) {
-                Log.d("RecipesFragment", result.toString())
                 val action =
                     RecipesFragmentDirections.actionRecipesFragmentToDetailsActivity(result)
                 findNavController().navigate(action)
             }
-
         })
         setupRecyclerView()
 
@@ -126,12 +122,9 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
 
     private fun setupRecyclerView() {
-
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerview.adapter = mAdapter
-//        showShimmerEffect()
     }
-
 
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -150,9 +143,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             mainViewModel.readRecipes.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
                     Log.d("RecipesFragment", "readDatabase called!")
-//                    mAdapter.recipes = database.first().foodRecipe.results
-                     mAdapter.submitList(database.first().foodRecipe.results)
-//                    hideShimmerEffect()
+                    mAdapter.submitList(database.first().foodRecipe.results)
                 } else {
                     requestApiData()
                 }
@@ -166,15 +157,10 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         mainViewModel.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-//                    hideShimmerEffect()
-//                    mAdapter.recipes =  response.data!!.results
                     response.data?.results.let { mAdapter.submitList(it) }
-                    Log.d("RecipesFragment", response.data?.results?.first().toString())
-//                    response.data?.let { mAdapter.setData(it) }
                     recipeViewModel.saveMealAndDietType()
                 }
                 is NetworkResult.Error -> {
-//                    hideShimmerEffect()
                     loadDataFromCache()
                     Toast.makeText(
                         requireContext(),
@@ -183,26 +169,20 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                     ).show()
                 }
                 is NetworkResult.Loading -> {
-//                    showShimmerEffect()
                 }
             }
         }
     }
 
     private fun searchApiData(searchQuery: String) {
-//        showShimmerEffect()
         mainViewModel.searchRecipes(recipeViewModel.applySearchQuery(searchQuery))
         mainViewModel.searchedRecipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-//                    hideShimmerEffect()
                     val foodRecipe = response.data
-//                    mAdapter.recipes=foodRecipe!!.results
                     foodRecipe?.results.let { mAdapter.submitList(it) }
-//                    foodRecipe?.let { mAdapter.setData(it) }
                 }
                 is NetworkResult.Error -> {
-//                    hideShimmerEffect()
                     loadDataFromCache()
                     Toast.makeText(
                         requireContext(),
@@ -211,7 +191,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                     ).show()
                 }
                 is NetworkResult.Loading -> {
-//                    showShimmerEffect()
                 }
             }
         }
@@ -221,25 +200,11 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         lifecycleScope.launch {
             mainViewModel.readRecipes.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-//                    mAdapter.recipes = database.first().foodRecipe.results
                     mAdapter.submitList(database.first().foodRecipe.results)
-//                    mAdapter.setData(database.first().foodRecipe)
                 }
             }
         }
     }
-
-//    private fun showShimmerEffect() {
-//        binding.shimmerFrameLayout.startShimmer()
-//        binding.shimmerFrameLayout.visibility = View.VISIBLE
-//        binding.recyclerview.visibility = View.GONE
-//    }
-//
-//    private fun hideShimmerEffect() {
-//        binding.shimmerFrameLayout.stopShimmer()
-//        binding.shimmerFrameLayout.visibility = View.GONE
-//        binding.recyclerview.visibility = View.VISIBLE
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -5,7 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import coil.load
+import com.bumptech.glide.Glide
 import com.naumenko.myrecipes.R
 import org.jsoup.Jsoup
 
@@ -17,10 +17,10 @@ class RecipeRowBinding {
         @BindingAdapter("loadImageFromUrl")
         @JvmStatic
         fun loadImageFromUrl(imageView: ImageView, imageUrl: String) {
-            imageView.load(imageUrl) {
-                crossfade(600)
-                error(R.drawable.ic_error_placeholder)
-            }
+            Glide.with(imageView.context)
+                .load(imageUrl)
+                .centerCrop()
+                .into(imageView)
         }
 
         @BindingAdapter("applyVeganColor")
@@ -50,8 +50,8 @@ class RecipeRowBinding {
 
         @BindingAdapter("parseHtml")
         @JvmStatic
-        fun parseHtml(textView: TextView, description: String?){
-            if(description != null) {
+        fun parseHtml(textView: TextView, description: String?) {
+            if (description != null) {
                 val desc = Jsoup.parse(description).text()
                 textView.text = desc
             }
