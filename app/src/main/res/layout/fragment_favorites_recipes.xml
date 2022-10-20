@@ -11,7 +11,7 @@
 
         <variable
             name="mAdapter"
-            type="com.naumenko.myrecipes.adapters.FavoritesRecipesAdapter" />
+            type="com.naumenko.myrecipes.adapters.FavoriteRecipesAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

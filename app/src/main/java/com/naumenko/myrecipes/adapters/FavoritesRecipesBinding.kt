@@ -16,7 +16,7 @@ class FavoritesRecipesBinding {
         fun setVisibility(
             view: View,
             favoriteEntity: List<FavoriteEntity>?,
-            mAdapter: FavoritesRecipesAdapter?
+            mAdapter: FavoriteRecipesAdapter?
         ) {
             when (view) {
                 is RecyclerView -> {

@@ -10,13 +10,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.naumenko.myrecipes.R
 import com.naumenko.myrecipes.data.database.entities.FavoriteEntity
 import com.naumenko.myrecipes.databinding.FavoriteRecipesRowLayoutBinding
+
 import com.naumenko.myrecipes.presentation.fragments.favorites.FavoritesRecipesFragmentDirections
 import com.naumenko.myrecipes.presentation.viewmodels.MainViewModel
 
-class FavoritesRecipesAdapter(
+class FavoriteRecipesAdapter(
     private val requireActivity: FragmentActivity,
     private val mainViewModel: MainViewModel
-) : RecyclerView.Adapter<FavoritesRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
+) : RecyclerView.Adapter<FavoriteRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var multiSelection = false
     private lateinit var mActionMode: ActionMode
