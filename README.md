@@ -18,7 +18,7 @@ Each recipe has a description, ingredient list, and cooking instructions.
 
 
 
-If you like a recipe, you can add it to your favorites by clicking on the star. In the favorites you can highlight recipes with a long click and delete or delete them all at once.
+If you like a recipe, you can add it to your favorites by clicking on the star. In the favorites you can select recipes with a long click and delete or delete them all at once.
 
 
 ![constructor](screenshots/details_add_favorites.jpg) ![constructor](screenshots/favorites_selected.jpg) ![constructor](screenshots/favorites_deleteAll.jpg)
