@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.naumenko.myrecipes.R
@@ -13,49 +14,19 @@ import com.naumenko.myrecipes.domain.models.Result
 import org.jsoup.Jsoup
 
 interface ResultActionListener {
-    fun onUserDetails(result: Result)
-}
-
-class UsersDiffCallback(
-    private val oldList: List<Result>,
-    private val newList: List<Result>
-) : DiffUtil.Callback() {
-
-    override fun getOldListSize(): Int = oldList.size
-    override fun getNewListSize(): Int = newList.size
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldResult = oldList[oldItemPosition]
-        val newResult = newList[newItemPosition]
-        return oldResult.recipeId == newResult.recipeId
-    }
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val oldUser = oldList[oldItemPosition]
-        val newUser = newList[newItemPosition]
-        return oldUser == newUser
-    }
+    fun onRecipesDetails(result: Result)
 }
 
 class RecipesAdapter(
     private val actionListener: ResultActionListener
-) : RecyclerView.Adapter<RecipesAdapter.RecipesViewHolder>(), View.OnClickListener {
+) : ListAdapter<Result, RecipesAdapter.RecipesViewHolder>(ItemCallback), View.OnClickListener {
 
-    var recipes: List<Result> = emptyList()
-        set(newValue) {
-            val diffCallback = UsersDiffCallback(field, newValue)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            field = newValue
-            diffResult.dispatchUpdatesTo(this)
-        }
 
     override fun onClick(v: View) {
         val result = v.tag as Result
-        actionListener.onUserDetails(result)
+        actionListener.onRecipesDetails(result)
 
     }
-
-    override fun getItemCount(): Int = recipes.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -65,17 +36,12 @@ class RecipesAdapter(
     }
 
     override fun onBindViewHolder(holder: RecipesViewHolder, position: Int) {
-        val currentRecipe = recipes[position]
+        val currentRecipe = getItem(position)
 
-        val context = holder.itemView.context
         with(holder.binding) {
-            holder.itemView.tag = currentRecipe
+            root.tag = currentRecipe
             titleTextView.text = currentRecipe.title
-
-            if (currentRecipe.summary != null) {
-                val desc = Jsoup.parse(currentRecipe.summary).text()
-                descriptionTextView.text = desc
-            }
+            descriptionTextView.text = Jsoup.parse(currentRecipe.summary).text()
             heartTextView.text = currentRecipe.aggregateLikes.toString()
             clockTextView.text = currentRecipe.readyInMinutes.toString()
             if (currentRecipe.vegan) {
@@ -110,4 +76,15 @@ class RecipesAdapter(
         val binding: RecipesRowLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
+}
+
+object ItemCallback : DiffUtil.ItemCallback<Result>() {
+
+    override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+        return oldItem.recipeId == newItem.recipeId
+    }
+
+    override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+        return oldItem == newItem
+    }
 }

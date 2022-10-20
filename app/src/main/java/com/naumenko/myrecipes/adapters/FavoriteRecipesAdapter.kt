@@ -10,20 +10,18 @@ import com.google.android.material.snackbar.Snackbar
 import com.naumenko.myrecipes.R
 import com.naumenko.myrecipes.data.database.entities.FavoriteEntity
 import com.naumenko.myrecipes.databinding.FavoriteRecipesRowLayoutBinding
+
 import com.naumenko.myrecipes.presentation.fragments.favorites.FavoritesRecipesFragmentDirections
 import com.naumenko.myrecipes.presentation.viewmodels.MainViewModel
-import com.naumenko.myrecipes.util.RecipesDiffUtil
 
-class FavoritesRecipesAdapter(
+class FavoriteRecipesAdapter(
     private val requireActivity: FragmentActivity,
     private val mainViewModel: MainViewModel
-) : RecyclerView.Adapter<FavoritesRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
+) : RecyclerView.Adapter<FavoriteRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var multiSelection = false
-
     private lateinit var mActionMode: ActionMode
     private lateinit var rootView: View
-
     private var selectedRecipes = arrayListOf<FavoriteEntity>()
     private var myViewHolders = arrayListOf<MyViewHolder>()
     private var favoriteRecipes = emptyList<FavoriteEntity>()
@@ -92,7 +90,7 @@ class FavoritesRecipesAdapter(
 
     }
 
-    private fun saveItemStateOnScroll(currentRecipe: FavoriteEntity, holder: MyViewHolder){
+    private fun saveItemStateOnScroll(currentRecipe: FavoriteEntity, holder: MyViewHolder) {
         if (selectedRecipes.contains(currentRecipe)) {
             changeRecipeStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
         } else {
@@ -201,4 +199,24 @@ class FavoritesRecipesAdapter(
         }
     }
 
+}
+class RecipesDiffUtil<T>(
+    private val oldList: List<T>,
+    private val newList: List<T>
+): DiffUtil.Callback() {
+    override fun getOldListSize(): Int {
+        return oldList.size
+    }
+
+    override fun getNewListSize(): Int {
+        return newList.size
+    }
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] === newList[newItemPosition]
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
+    }
 }

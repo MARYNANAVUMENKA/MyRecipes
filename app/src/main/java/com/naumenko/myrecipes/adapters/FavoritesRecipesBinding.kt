@@ -13,12 +13,16 @@ class FavoritesRecipesBinding {
 
         @BindingAdapter("setVisibility", "setData", requireAll = false)
         @JvmStatic
-        fun setVisibility(view: View, favoriteEntity: List<FavoriteEntity>?, mAdapter: FavoritesRecipesAdapter?) {
+        fun setVisibility(
+            view: View,
+            favoriteEntity: List<FavoriteEntity>?,
+            mAdapter: FavoriteRecipesAdapter?
+        ) {
             when (view) {
                 is RecyclerView -> {
                     val dataCheck = favoriteEntity.isNullOrEmpty()
                     view.isInvisible = dataCheck
-                    if(!dataCheck){
+                    if (!dataCheck) {
                         favoriteEntity?.let { mAdapter?.setData(it) }
                     }
                 }

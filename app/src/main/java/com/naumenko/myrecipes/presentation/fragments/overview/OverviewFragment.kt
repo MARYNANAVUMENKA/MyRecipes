@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import coil.load
+import com.bumptech.glide.Glide
 import com.naumenko.myrecipes.R
 import com.naumenko.myrecipes.adapters.RecipeRowBinding
 import com.naumenko.myrecipes.databinding.FragmentOverviewBinding
@@ -24,18 +24,19 @@ class OverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentOverviewBinding.inflate(inflater, container, false)
 
         val args = arguments
         val myBundle: Result = args!!.getParcelable<Result>(RECIPE_RESULT_KEY) as Result
-
-        binding.mainImageView.load(myBundle.image)
+        Glide.with(requireContext())
+            .load(myBundle.image)
+            .centerCrop()
+            .error(R.drawable.ic_error_placeholder)
+            .into(binding.mainImageView)
         binding.titleTextView.text = myBundle.title
         binding.likesTextView.text = myBundle.aggregateLikes.toString()
         binding.timeTextView.text = myBundle.readyInMinutes.toString()
         RecipeRowBinding.parseHtml(binding.summaryTextView, myBundle.summary)
-
         updateColors(myBundle.vegetarian, binding.vegetarianTextView, binding.vegetarianImageView)
         updateColors(myBundle.vegan, binding.veganTextView, binding.veganImageView)
         updateColors(myBundle.cheap, binding.cheapTextView, binding.cheapImageView)

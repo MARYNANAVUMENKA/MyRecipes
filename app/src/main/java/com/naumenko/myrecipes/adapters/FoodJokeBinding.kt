@@ -47,7 +47,7 @@ class FoodJokeBinding {
                     }
                 }
                 is NetworkResult.Success -> {
-                    when(view){
+                    when (view) {
                         is ProgressBar -> {
                             view.visibility = View.INVISIBLE
                         }
@@ -66,18 +66,18 @@ class FoodJokeBinding {
             view: View,
             apiResponse: NetworkResult<FoodJoke>?,
             database: List<FoodJokeEntity>?
-        ){
-            if(database != null){
-                if(database.isEmpty()){
+        ) {
+            if (database != null) {
+                if (database.isEmpty()) {
                     view.visibility = View.VISIBLE
-                    if(view is TextView){
-                        if(apiResponse != null){
+                    if (view is TextView) {
+                        if (apiResponse != null) {
                             view.text = apiResponse.message.toString()
                         }
                     }
                 }
             }
-            if(apiResponse is NetworkResult.Success){
+            if (apiResponse is NetworkResult.Success) {
                 view.visibility = View.INVISIBLE
             }
         }

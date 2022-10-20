@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.naumenko.myrecipes.R
-import com.naumenko.myrecipes.adapters.FavoritesRecipesAdapter
+import com.naumenko.myrecipes.adapters.FavoriteRecipesAdapter
 import com.naumenko.myrecipes.databinding.FragmentFavoritesRecipesBinding
 import com.naumenko.myrecipes.presentation.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,8 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class FavoritesRecipesFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by viewModels()
-    private val mAdapter: FavoritesRecipesAdapter by lazy {
-        FavoritesRecipesAdapter(
+    private val mAdapter: FavoriteRecipesAdapter by lazy {
+        FavoriteRecipesAdapter(
             requireActivity(),
             mainViewModel
         )
@@ -34,7 +34,6 @@ class FavoritesRecipesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentFavoritesRecipesBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
